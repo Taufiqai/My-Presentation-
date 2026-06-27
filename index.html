@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>করবো কাজ গড়বো দেশ · সবার আগে বাংলাদেশ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canopy:#0f2e1d;
+    --leaf-deep:#1f5d36;
+    --leaf-mid:#2f8049;
+    --leaf-bright:#4faa61;
+    --bud:#bcdf8a;
+    --bud-glow:#e7f5c4;
+    --cream:#f3f7ee;
+    --bark:#5a4632;
+    --gold:#e0b352;
+    --ink:#13261a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    font-family:'Hind Siliguri',sans-serif;
+    background:radial-gradient(120% 90% at 50% 0%, #cfe6cf 0%, #a8cfa6 32%, #6fae73 62%, #3c7d4c 100%);
+    color:var(--ink);overflow-x:hidden;min-height:100vh;position:relative;
+  }
+  .hills{position:fixed;inset:0;z-index:0;pointer-events:none;}
+  .hills svg{position:absolute;bottom:0;width:100%;height:auto;}
+  .hill-1{opacity:.55;}.hill-2{opacity:.4;}.hill-3{opacity:.28;}
+  .mist-band{position:fixed;left:0;right:0;height:160px;z-index:0;pointer-events:none;
+    background:linear-gradient(to bottom, rgba(255,255,255,.55), rgba(255,255,255,0));
+    filter:blur(6px);animation:drift 26s ease-in-out infinite alternate;}
+  .mist-band.m1{top:38%;}.mist-band.m2{top:58%;opacity:.6;animation-duration:34s;}
+  @keyframes drift{from{transform:translateX(-4%);}to{transform:translateX(4%);}}
+  .sun{position:fixed;top:-120px;right:-60px;width:420px;height:420px;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,249,222,.9), rgba(255,249,222,0) 65%);
+    z-index:0;pointer-events:none;animation:pulse 9s ease-in-out infinite alternate;}
+  @keyframes pulse{from{opacity:.7;}to{opacity:1;}}
+
+  .wrap{position:relative;z-index:2;max-width:1080px;margin:0 auto;padding:56px 22px 40px;min-height:100vh;display:flex;flex-direction:column;}
+
+  header{text-align:center;margin-bottom:6px;}
+  h1{
+    font-family:'Tiro Bangla',serif;font-weight:400;
+    font-size:clamp(1.9rem,5.4vw,3.4rem);line-height:1.2;color:var(--canopy);
+    text-shadow:0 1px 0 rgba(255,255,255,.55);
+  }
+
+  .stage{position:relative;height:640px;margin-top:10px;flex:0 0 auto;}
+  @media(max-width:640px){.stage{height:560px;}}
+
+  .branch-svg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:520px;max-width:96%;height:auto;z-index:1;pointer-events:none;}
+
+  .sprig{position:absolute;cursor:pointer;transform-origin:var(--ox,50%) var(--oy,100%);
+    transition:transform .25s ease, filter .25s ease;will-change:transform;}
+  .sprig:focus{outline:none;}
+  .sprig:focus-visible .leaf-shape,.sprig:focus-visible .bud-shape{
+    filter:drop-shadow(0 0 0 3px var(--gold)) drop-shadow(0 4px 10px rgba(0,0,0,.3));}
+  .sprig:hover{filter:drop-shadow(0 10px 18px rgba(0,0,0,.25));}
+
+  @keyframes sway{0%,100%{transform:rotate(var(--rest,-2deg));}50%{transform:rotate(calc(var(--rest,-2deg) + 3deg));}}
+  .sprig.alive{animation:sway 6s ease-in-out infinite;}
+  .sprig.s2{animation-delay:-1.6s;}
+  .sprig.bud{animation-delay:-3.1s;animation-duration:7s;}
+
+  @keyframes fall{
+    0%{transform:translate(0,0) rotate(var(--rest,0deg));opacity:1;}
+    18%{transform:translate(var(--fx1,-10px),18px) rotate(20deg);}
+    50%{transform:translate(var(--fx2,40px),220px) rotate(-160deg);opacity:1;}
+    100%{transform:translate(var(--fx3,-30px),520px) rotate(380deg);opacity:0;}
+  }
+  .sprig.falling{animation:fall 2.05s cubic-bezier(.45,.05,.55,.95) forwards;pointer-events:none;}
+  .leaf-shape,.bud-shape{display:block;}
+
+  .toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(40px);
+    background:rgba(15,46,29,.95);color:var(--cream);padding:13px 20px;border-radius:13px;
+    font-size:.9rem;box-shadow:0 14px 40px rgba(0,0,0,.35);z-index:50;opacity:0;
+    transition:opacity .3s ease, transform .3s ease;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  .toast a{color:var(--bud-glow);font-weight:600;text-decoration:underline;}
+
+  .spacer{flex:1 1 auto;}
+  .credit{
+    align-self:flex-end;text-align:right;max-width:680px;
+    font-size:.92rem;line-height:1.65;color:var(--canopy);font-weight:500;
+    background:rgba(255,255,255,.62);backdrop-filter:blur(5px);
+    border:1px solid rgba(31,93,54,.2);border-radius:14px;padding:14px 20px;
+    box-shadow:0 10px 26px rgba(18,45,28,.12);
+  }
+  .credit b{font-weight:700;}
+
+  @media(prefers-reduced-motion:reduce){
+    .sprig.alive,.mist-band,.sun{animation:none;}
+    .sprig.falling{animation:fade .5s forwards;}
+    @keyframes fade{to{opacity:0;transform:translateY(40px);}}
+  }
+</style>
+</head>
+<body>
+  <div class="sun"></div>
+  <div class="mist-band m1"></div>
+  <div class="mist-band m2"></div>
+  <div class="hills">
+    <svg class="hill-3" viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="#2f8049" d="M0,200 C240,120 480,260 720,200 C960,140 1200,240 1440,180 L1440,320 L0,320 Z"/></svg>
+    <svg class="hill-2" viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="#1f5d36" d="M0,240 C300,180 520,300 760,240 C1000,180 1180,280 1440,230 L1440,320 L0,320 Z"/></svg>
+    <svg class="hill-1" viewBox="0 0 1440 320" preserveAspectRatio="none"><path fill="#0f2e1d" d="M0,275 C260,235 540,300 820,270 C1080,242 1260,300 1440,275 L1440,320 L0,320 Z"/></svg>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <h1>করবো কাজ গড়বো দেশ<br>সবার আগে বাংলাদেশ</h1>
+    </header>
+
+    <div class="stage" id="stage">
+      <svg class="branch-svg" viewBox="0 0 520 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="stemGrad" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#3d2c1a"/><stop offset="1" stop-color="#6f5232"/>
+          </linearGradient>
+        </defs>
+        <path d="M260,560 C250,440 270,360 262,280 C256,220 244,170 262,110" stroke="url(#stemGrad)" stroke-width="14" stroke-linecap="round"/>
+        <path d="M262,300 C210,290 165,270 130,250" stroke="url(#stemGrad)" stroke-width="9" stroke-linecap="round"/>
+        <path d="M262,300 C314,290 360,270 396,250" stroke="url(#stemGrad)" stroke-width="9" stroke-linecap="round"/>
+        <path d="M262,140 C260,130 262,120 262,108" stroke="url(#stemGrad)" stroke-width="8" stroke-linecap="round"/>
+      </svg>
+
+      <div class="sprig alive s1" id="leaf1"
+           style="--rest:-14deg;--ox:80%;--oy:90%;left:14%;top:30%;--fx1:-30px;--fx2:-60px;--fx3:-110px;"
+           role="button" tabindex="0" aria-label="দপ্তরের কর্মপরিকল্পনা">
+        <svg class="leaf-shape" width="150" height="120" viewBox="0 0 150 120" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5fb56f"/><stop offset="1" stop-color="#1f5d36"/></linearGradient></defs>
+          <path d="M140 105 C70 120 8 78 12 30 C58 8 128 14 144 60 C148 78 146 94 140 105 Z" fill="url(#lg1)"/>
+          <path d="M140 105 C95 92 50 70 16 32" stroke="#e7f5c4" stroke-width="2.2" fill="none" opacity=".55"/>
+          <path d="M96 96 C84 80 72 64 60 50 M112 84 C100 70 90 58 80 46 M70 104 C64 88 58 74 52 60" stroke="#cfeec0" stroke-width="1.2" fill="none" opacity=".4"/>
+        </svg>
+      </div>
+
+      <div class="sprig alive s2" id="leaf2"
+           style="--rest:14deg;--ox:20%;--oy:90%;right:14%;top:30%;--fx1:30px;--fx2:60px;--fx3:110px;"
+           role="button" tabindex="0" aria-label="National Delivery Portal">
+        <svg class="leaf-shape" width="150" height="120" viewBox="0 0 150 120" xmlns="http://www.w3.org/2000/svg" style="transform:scaleX(-1)">
+          <defs><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#52a865"/><stop offset="1" stop-color="#1c5230"/></linearGradient></defs>
+          <path d="M140 105 C70 120 8 78 12 30 C58 8 128 14 144 60 C148 78 146 94 140 105 Z" fill="url(#lg2)"/>
+          <path d="M140 105 C95 92 50 70 16 32" stroke="#e7f5c4" stroke-width="2.2" fill="none" opacity=".55"/>
+          <path d="M96 96 C84 80 72 64 60 50 M112 84 C100 70 90 58 80 46 M70 104 C64 88 58 74 52 60" stroke="#cfeec0" stroke-width="1.2" fill="none" opacity=".4"/>
+        </svg>
+      </div>
+
+      <div class="sprig alive bud" id="bud"
+           style="--rest:0deg;--ox:50%;--oy:100%;left:50%;top:6%;transform:translateX(-50%);--fx1:0px;--fx2:10px;--fx3:-20px;"
+           role="button" tabindex="0" aria-label="BCSKR Knowledge Repository">
+        <svg class="bud-shape" width="80" height="120" viewBox="0 0 80 120" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bg1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#7fb84e"/><stop offset="1" stop-color="#dff0a8"/></linearGradient>
+            <radialGradient id="bglow" cx="50%" cy="35%" r="60%"><stop offset="0" stop-color="#f3ffd0"/><stop offset="1" stop-color="#bcdf8a"/></radialGradient>
+          </defs>
+          <ellipse cx="40" cy="40" rx="34" ry="34" fill="url(#bglow)" opacity=".35"/>
+          <path d="M40 14 C24 30 22 64 40 104 C58 64 56 30 40 14 Z" fill="url(#bg1)"/>
+          <path d="M40 20 C34 44 36 76 40 100" stroke="#3c7d4c" stroke-width="1.6" opacity=".55" fill="none"/>
+          <path d="M40 26 C46 26 56 36 56 52 C56 70 46 90 40 100" stroke="#eaf7c5" stroke-width="1.3" opacity=".7" fill="none"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+
+    <div class="credit">
+      উপস্থাপনায়: <b>মোহাম্মদ তৌফিকুল ইসলাম</b>, যুগ্মসচিব, মন্ত্রিপরিষদ বিভাগ, ক্রমিক-১০৪, ১২৩তম সিনিয়র স্টাফ কোর্স, বিপিএটিসি।
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+  const links = {
+    leaf1: "action_plan_infographic.html",
+    leaf2: "https://bnp-election-manifesto-ithp.vercel.app/",
+    bud:   "https://bcs-knowledge-repository.vercel.app/"
+  };
+  const names = {
+    leaf1: "দপ্তরের কর্মপরিকল্পনা",
+    leaf2: "National Delivery Portal",
+    bud:   "BCSKR — Knowledge Repository"
+  };
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  function showToast(id, url){
+    clearTimeout(toastTimer);
+    toast.innerHTML = '\u{1F343} \u0996\u09c1\u09b2\u099b\u09c7 \u2014 <a href="'+url+'" target="_blank" rel="noopener">'+names[id]+'</a>';
+    toast.classList.add('show');
+    toastTimer = setTimeout(()=>toast.classList.remove('show'), 4200);
+  }
+  function dropAndOpen(el){
+    const id = el.id;
+    if(el.classList.contains('falling')) return;
+    el.classList.remove('alive');
+    el.classList.add('falling');
+    showToast(id, links[id]);
+    setTimeout(()=>{ window.open(links[id], '_blank', 'noopener'); }, 650);
+    setTimeout(()=>{
+      el.classList.remove('falling');
+      el.style.opacity='';
+      void el.offsetWidth;
+      el.classList.add('alive');
+    }, 3200);
+  }
+  document.querySelectorAll('.sprig').forEach(el=>{
+    let hoverGuard=false;
+    el.addEventListener('mouseenter', ()=>{
+      if(hoverGuard) return; hoverGuard=true;
+      setTimeout(()=>hoverGuard=false, 3500);
+      dropAndOpen(el);
+    });
+    el.addEventListener('click', ()=>dropAndOpen(el));
+    el.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();dropAndOpen(el);} });
+    el.addEventListener('touchstart', e=>{ e.preventDefault(); dropAndOpen(el); }, {passive:false});
+  });
+</script>
+</body>
+</html>
